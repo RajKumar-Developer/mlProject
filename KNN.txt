@@ -1,0 +1,66 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+import cv2
+import os
+import numpy as np
+from sklearn.model_selection import train_test_split
+
+# Define the paths to your dataset directories
+train_dir = augmented_train_dir_one_in_one +'\\train'
+test_dir = augmented_train_dir_one_in_one +'\\test'
+
+# Initialize empty lists for feature vectors and labels
+feature_vectors = []
+labels = []
+
+# Define a mapping for labels
+label_mapping = {
+    'Covid': 0,
+    'Normal': 1
+}
+
+# Function to load images and create feature vectors
+def load_images_and_create_feature_vectors(data_dir):
+    for label in label_mapping.keys():
+        label_dir = os.path.join(data_dir, label)
+        for root, dirs, files in os.walk(label_dir):
+            for file in files:
+                if file.lower().endswith(('.jpg', '.jpeg', '.png')):
+                    image_path = os.path.join(root, file)
+                    image = cv2.imread(image_path)
+                    feature_vector = image.flatten()
+                    feature_vectors.append(feature_vector)
+                    labels.append(label_mapping[label])
+
+# Load training data
+load_images_and_create_feature_vectors(train_dir)
+
+# Convert lists to NumPy arrays
+X_train = np.array(feature_vectors)
+y_train = np.array(labels)
+
+# Clear lists for testing data
+feature_vectors = []
+labels = []
+
+# Load testing data
+load_images_and_create_feature_vectors(test_dir)
+
+# Convert lists to NumPy arrays for testing data
+X_test = np.array(feature_vectors)
+y_test = np.array(labels)
+
+# Now you have X_train, y_train, X_test, and y_test for your KNN classification.
