@@ -1,0 +1,2 @@
+- run the fast api on 5000
+- run the django on 8001 port
